@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="data">
+        <item>password</item>
+        <item>private key</item>
+
+
+    </string-array>
+    <string-array name="water" >
+        <item>*</item>
+        <item>150ml</item>
+        <item>300ml</item>
+        <item>1000ml</item>
+        <item>自定义</item>
+    </string-array>
+    <string-array name="water_time" />
+    <string-array name="dian" >
+    <item>*</item>
+    <item>正转：30s</item>
+    <item>反转：30s</item>
+    <item>自定义</item>
+    </string-array>
+    <string-array name="plan_repeat" >
+        <item>*</item>
+        <item>每小时</item>
+        <item>每天</item>
+        <item>每周</item>
+        <item>每月</item>
+    </string-array><string-array name="plan_condition" >
+        <item>*</item>
+        <item>ON</item>
+        <item>OFF</item>
+    </string-array>
+
+
+</resources>
