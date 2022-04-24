@@ -963,8 +963,10 @@ public class MainActivity extends AppCompatActivity {
       //  adapter.notifyDataSetChanged();
         myAdapter.notifyDataSetChanged();
         plan_list.setAdapter(myAdapter);
+        String  string=User.getPlan_time_year()+"-"+User.getPlan_time_moon()+"-"+User.getPlan_time_day()+"-"+User.getPlan_time_hour()+":"+User.getPlan_time_minute()+"-"+User.getPlan_time_week()+" "+User.getRadio_num()+" "+User.getPlan_repeat_num()+" "+User.getPlan_conditon_num();
+        Exec.ssh(User.getIp(),"pi","/home/pi/scrip/test2.sh "+string);
 
-        Log.e("tag","计划任务添加："+"单选编号："+User.getRadio_num()+",重复编号"+User.getPlan_repeat_num()+",状态编号"+User.getPlan_conditon_num());
+        // Log.e("tag","计划任务添加："+"单选编号："+User.getRadio_num()+",重复编号"+User.getPlan_repeat_num()+",状态编号"+User.getPlan_conditon_num());
         Log.e("tag",User.getPlan_time_year()+"-"+User.getPlan_time_moon()+"-"+User.getPlan_time_day()+"-"+User.getPlan_time_hour()+":"+User.getPlan_time_minute()+"-"+User.getPlan_time_week()+" "+User.getRadio_num()+" "+User.getPlan_repeat_num()+" "+User.getPlan_conditon_num());
 
     }
@@ -1064,6 +1066,7 @@ public class MainActivity extends AppCompatActivity {
         for (int i = 0; i < checkedIndexList.size(); i++) {
             //需要强转为int,才会删除对应下标的数据,否则默认删除与括号中对象相同的数据
             listData.remove((int) checkedIndexList.get(i));
+            Exec.ssh(User.getIp(),"pi","/home/pi/scrip/cronDel.sh "+(int) checkedIndexList.get(i));
             checkBoxList.remove(checkedIndexList.get(i));
         }
         for (int i = 0; i < checkBoxList.size(); i++) {

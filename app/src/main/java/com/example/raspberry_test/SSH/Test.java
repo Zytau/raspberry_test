@@ -13,17 +13,17 @@ public class Test {
         user.setIp("192.168.0.100");
         user.setUserName("pi");
         user.setPassword("pi2021");*/
-        RemoteExecuteCommand rec = new RemoteExecuteCommand("10.0.0.25", "pi", "qq123321");//执行命令
+        //RemoteExecuteCommand rec = new RemoteExecuteCommand("10.0.0.25", "pi", "^K5F9L2!#^Gb%ekJ9&2xtE");//执行命令
       //  System.out.println(rec.execute("ls"));//执行脚本
         //rec.execute("ls");//这个方法与上面最大的区别就是，上面的方法，不管执行成功与否都返回，
 
    //  rec.executeSuccess("cat index.html");//这个方法，如果命令或者脚本执行错误将返回空字符串
 
 
-        String s = new String();
+       // String s = new String();
 
-        s=rec.execute("ls");
-        System.out.println(s.toString());
+       // s=rec.execute("ls");
+       // System.out.println(s.toString());
    /* while (true){
         Scanner scanner = new Scanner(System.in);
 
@@ -36,5 +36,8 @@ public class Test {
         //rec.executeSuccess(s);  //返回执行指令的成效   但还会在执行一次命令
 
     }*/
+
+        String s = Exec.ssh("10.0.0.25", "pi", " crontab -l");
+        System.out.println(s);
     }
 }
