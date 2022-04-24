@@ -49,6 +49,7 @@ import com.example.raspberry_test.SSH.RemoteExecuteCommand;
 import com.example.raspberry_test.SSH.T;
 import com.example.raspberry_test.SSH.Temperature;
 import com.example.raspberry_test.SSH.Time;
+import com.example.raspberry_test.SSH.obtain_plan_list;
 import com.example.raspberry_test.data.User;
 import com.example.raspberry_test.plan.DateTimePickDialogUtil;
 
@@ -974,8 +975,9 @@ public class MainActivity extends AppCompatActivity {
     public void initListData() {
         //静态赋值
         listData = new ArrayList<String>();
-        for (int i = 0; i < 1; i++) {
-            listData.add("item" + i);
+
+        for (int i = 0; i < obtain_plan_list.plan_list().size(); i++) {
+            listData.add(obtain_plan_list.plan_list().get(i));
         }
     }
     /**
