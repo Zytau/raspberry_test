@@ -16,37 +16,25 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.raspberry_test.SSH.obtain_plan_list;
 import com.example.raspberry_test.data.User;
 
+/**
+ * @描述：登录界面
+ * */
+
 public class activate_login extends AppCompatActivity {
     private Button loge;
     private Button btn1;
     private TextView mwendu;
     private Switch T_open,F_open;
     private EditText ip,port,password;
-
-
     public final static int RESULT_CODE = 1;
-
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activate_login);
         initView();
-
-
-
-
     }
 
-
-
-
-
-
-
-
-    //初始化
+    //初始化控件
     private void initView() {
         loge=findViewById(R.id.loge);
         ip=findViewById(R.id.ip);
@@ -114,14 +102,6 @@ public class activate_login extends AppCompatActivity {
 
 
     }
-
-
-
-
-
-
-
-
 
     /**
      * 按键一键清空EditText内的内容

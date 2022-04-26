@@ -7,8 +7,6 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
-import android.app.ActionBar;
-import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -18,12 +16,10 @@ import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.Message;
 import android.os.StrictMode;
-import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
@@ -33,33 +29,54 @@ import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
-import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.example.raspberry_test.SSH.Exec;
-import com.example.raspberry_test.SSH.HardDrive;
 import com.example.raspberry_test.SSH.RemoteExecuteCommand;
-import com.example.raspberry_test.SSH.T;
 import com.example.raspberry_test.SSH.Temperature;
 import com.example.raspberry_test.SSH.Time;
 import com.example.raspberry_test.SSH.obtain_plan_list;
 import com.example.raspberry_test.data.User;
 import com.example.raspberry_test.plan.DateTimePickDialogUtil;
 
-import java.io.IOError;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * @描述：程序的整体
+ *
+ * 1.电机，水泵的手动开关
+ *    。定义开关(Switch)
+ *    。开关运行时对应的图片，动态运作
+ * 2.电机，水泵的定时
+ *    。下拉列表( Spinner)
+ *    。选择固定时间
+ *    。选择自定义的弹窗
+ * 3.计划任务的设计
+ *    。硬件选择
+ *      - 单选按钮(RadioButton)
+ *    。时间选择
+ *      - 输入框(EditText)
+ *      -时间选择控件 <DatePicker/> <TimePicker/>
+ *    。下拉列表
+ *      - 重复
+ *      -状态
+ *    。列表显示
+ *      - 从树莓派中获取当前计划任务的列表
+ *      - 添加
+ *      - 删除
+ *
+ *
+ * */
 public class MainActivity extends AppCompatActivity {
     private Switch Water,T_Mopen,F_Mopen,Led;
     private Spinner mWaterSpinner;
@@ -727,7 +744,9 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-
+        /**
+         * @描述：计划任务-获取选择时间
+         * */
         //获取时间：
         plan_getTime.setText(initStartDateTime);
         plan_getTime.setOnClickListener(new View.OnClickListener() {

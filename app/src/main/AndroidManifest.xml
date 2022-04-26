@@ -9,8 +9,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Raspberry_test">
-        <activity android:name=".activity_test02"></activity>
-        <activity android:name=".activaty_Test" />
+        <activity android:name=".Test.activity_test02"></activity>
+        <activity android:name=".Test.activaty_Test" />
         <activity
             android:name=".activate_login"
             android:label="@string/title_activity_activate_login" />

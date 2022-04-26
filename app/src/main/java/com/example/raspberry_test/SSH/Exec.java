@@ -1,11 +1,11 @@
 package com.example.raspberry_test.SSH;/* -*-mode:java; c-basic-offset:2; indent-tabs-mode:nil -*- */
 /**
- * This program will demonstrate remote exec.
- *   $ CLASSPATH=.:../build javac Exec.java 
- *   $ CLASSPATH=.:../build java Exec
- * You will be asked username, hostname, displayname, passwd and command.
- * If everything works fine, given command will be invoked 
- * on the remote side and outputs will be printed out.
+ * @类：SSH
+ * @描述
+ * 该程序将演示远程执行。
+ * 您将被询问用户名、主机名、显示名、密码和命令。
+ * 如果一切正常，将调用给定的命令
+ * 在远程端，输出将被打印出来。
  *
  */
 

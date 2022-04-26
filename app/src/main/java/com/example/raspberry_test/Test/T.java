@@ -1,4 +1,4 @@
-package com.example.raspberry_test.SSH;
+package com.example.raspberry_test.Test;
 
 import android.util.Log;
 

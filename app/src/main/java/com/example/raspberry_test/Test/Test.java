@@ -1,5 +1,6 @@
-package com.example.raspberry_test.SSH;
+package com.example.raspberry_test.Test;
 
+import com.example.raspberry_test.SSH.Exec;
 import com.example.raspberry_test.data.User;
 
 /**

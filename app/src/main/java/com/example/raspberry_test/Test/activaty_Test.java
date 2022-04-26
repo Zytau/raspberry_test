@@ -1,22 +1,17 @@
-package com.example.raspberry_test;
+package com.example.raspberry_test.Test;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
-import android.widget.Toast;
 
+import com.example.raspberry_test.R;
 import com.example.raspberry_test.SSH.RemoteExecuteCommand;
-
-import java.io.IOError;
+import com.example.raspberry_test.activity_test02;
 
 public class activaty_Test extends AppCompatActivity {
     private Spinner spin_text;
@@ -36,7 +31,7 @@ public class activaty_Test extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                //SSH("192.168.0.100", "pi", "pi2021", "./Time_motor "+5);
-                Intent intent=new Intent(activaty_Test.this,activity_test02.class);
+                Intent intent=new Intent(activaty_Test.this, activity_test02.class);
                 startActivity(intent);
                 //activate_login.this.setResult(RESULT_OK,intent);
                 //*结束本Activity*//*
@@ -45,11 +40,7 @@ public class activaty_Test extends AppCompatActivity {
         });
 
     }
-
-
-
-
-
+    
     private int  SSH(String ip, String name, String password, String order) {
         RemoteExecuteCommand remoteExecuteCommand = new RemoteExecuteCommand(ip, name, password);
         // List<String> S = new ArrayList<>();

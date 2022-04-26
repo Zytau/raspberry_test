@@ -11,6 +11,10 @@ import android.widget.TextView;
 import java.util.logging.Handler;
 import java.util.logging.LogRecord;
 
+
+/**
+ * @描述：进度条
+ * */
 public class activity_boot_animation extends AppCompatActivity {
 
     public activity_boot_animation() {
@@ -19,24 +23,6 @@ public class activity_boot_animation extends AppCompatActivity {
     ProgressBar progressBar;
     int i = 0;
     int progressBarMax = 0;
-    /* 创建Handler对象*/
- /*   Handler handler = new Handler() {
-        @Override
-        public void publish(LogRecord record) {
-
-        }
-
-        @Override
-        public void flush() {
-
-        }
-
-        @Override
-        public void close() throws SecurityException {
-
-        }
-    };*/
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,10 +73,4 @@ public class activity_boot_animation extends AppCompatActivity {
             }
         }).start();
     }
-
-
-
-
-
-
 }

@@ -7,7 +7,7 @@
     <DatePicker
         android:theme="@android:style/Theme.Holo.Light.NoActionBar"
         android:id="@+id/datepicker"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:calendarViewShown="false"
 
@@ -15,9 +15,8 @@
 
     <TimePicker
         android:id="@+id/timepicker"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-
         android:timePickerMode="spinner"/>
 
 </LinearLayout>

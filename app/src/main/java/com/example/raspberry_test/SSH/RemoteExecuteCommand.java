@@ -15,7 +15,7 @@ import ch.ethz.ssh2.Session;
 import ch.ethz.ssh2.StreamGobbler;
 /**
  * @类名称: SSH
- * @时间: 2021/7/26 21:54
+ * @时间: 2022年4月25日15:16:23
  * @描述: TODO 类描述
  *  API说明：
  * 1.首先构造一个连接器，传入一个需要登陆的ip地址
@@ -35,10 +35,8 @@ import ch.ethz.ssh2.StreamGobbler;
  *  conn.close();
  **/
 
-
 /**
  * 远程执行linux的shell script
- *
  * @author Ickes
  * @since V0.1
  */
