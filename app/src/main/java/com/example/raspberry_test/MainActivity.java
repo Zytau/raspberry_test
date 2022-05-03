@@ -213,10 +213,15 @@ public class MainActivity extends AppCompatActivity {
                     case 0:break;
                     
 
-                    //150ml
+                    //5s
                     case 1:
                         mDianSpinner.getParent();
-                        SSH(User.getIp(), User.getUsername(), User.getPassword(), "./Time_water.sh "+1);
+//                        SSH(User.getIp(), User.getUsername(), User.getPassword(), "./Time_water.sh "+1);
+                        Thread thread = new Thread(()->{
+                            Exec.ssh(User.getIp(), User.getUsername(),"/home/pi/Code/switch/bumpDelay");
+                        });
+                        thread.start();
+
                         CountDownTimer timer=new CountDownTimer(1500,100) {
                             @Override
                             public void onTick(long millisUntilFinished) {
@@ -233,11 +238,11 @@ public class MainActivity extends AppCompatActivity {
                         timer.start();
 
 
-                        //300ml
+                        //30分钟
                     case 2:break;
-                    //1000ml
+                    //1小时
                     case 3:break;
-                    //水泵自定义
+                    //水泵自定义时间
                     case 4:
                         AlertDialog.Builder customizeDialog_water=new AlertDialog.Builder(MainActivity.this);
                         final View dialogView = LayoutInflater.from(MainActivity.this).inflate(R.layout.diy_water,null);
@@ -252,7 +257,12 @@ public class MainActivity extends AppCompatActivity {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 String str_water=editText_water.getText().toString();
-                                SSH(User.getIp(), User.getUsername(), User.getPassword(), "./Time_water.sh "+str_water);
+//                                SSH(User.getIp(), User.getUsername(), User.getPassword(), "./Time_water.sh "+str_water);
+                                Thread thread = new Thread(()->{
+                                    Exec.ssh(User.getIp(), User.getUsername(),"/home/pi/Code/switch/bumpDelay"+str_water);
+                                });
+                                thread.start();
+
                                 CountDownTimer timer_zheng=new CountDownTimer((long) (Float.parseFloat(str_water)*1000),1000) {
                                     @Override
                                     public void onTick(long millisUntilFinished) {
@@ -307,7 +317,11 @@ public class MainActivity extends AppCompatActivity {
                     case 1:{ Toast.makeText(MainActivity.this, "你电机点击的是:"+languages[pos], 100).show();
                         imageButton.setVisibility(View.VISIBLE);
                         mDianSpinner.getParent();
-                        SSH(User.getIp(), User.getUsername(), User.getPassword(), "./Time.sh "+0.5);
+//                        SSH(User.getIp(), User.getUsername(), User.getPassword(), "./Time.sh "+0.5);
+                        Thread thread = new Thread(()->{
+                            Exec.ssh(User.getIp(), User.getUsername(),"/home/pi/Code/switch/MotorPositiveDelay"+5);
+                        });
+                        thread.start();
                         CountDownTimer timer=new CountDownTimer(30000,1000) {
                             @Override
                             public void onTick(long millisUntilFinished) {
@@ -340,7 +354,11 @@ public class MainActivity extends AppCompatActivity {
                         mDianSpinner.getParent();
                         imageView_d.setImageResource(R.drawable.dian_0);
                         AnimationDrawable animationDrawable_dian_fan=(AnimationDrawable) imageView_d.getDrawable();
-                        SSH(User.getIp(), User.getUsername(), User.getPassword(), "./Time_fan.sh "+0.5);
+//                        SSH(User.getIp(), User.getUsername(), User.getPassword(), "./Time_fan.sh "+0.5);
+                        Thread thread = new Thread(()->{
+                            Exec.ssh(User.getIp(), User.getUsername(),"/home/pi/Code/switch/MotorReverseDelay"+5);
+                        });
+                        thread.start();
                         CountDownTimer timer=new CountDownTimer(30000,1000) {
                             @Override
                             public void onTick(long millisUntilFinished) {
@@ -402,7 +420,11 @@ public class MainActivity extends AppCompatActivity {
                                     switch (state){
                                         case 0:
                                             String str_zheng=editText.getText().toString();
-                                            SSH(User.getIp(), User.getUsername(), User.getPassword(), "./Time.sh "+str_zheng);
+//                                            SSH(User.getIp(), User.getUsername(), User.getPassword(), "./Time.sh "+str_zheng);
+                                            Thread thread = new Thread(()->{
+                                                Exec.ssh(User.getIp(), User.getUsername(),"/home/pi/Code/switch/MotorPositiveDelay"+str_zheng);
+                                            });
+                                            thread.start();
                                             CountDownTimer timer_zheng=new CountDownTimer((long) (Float.parseFloat(str_zheng)*60000),1000) {
                                                 @Override
                                                 public void onTick(long millisUntilFinished) {
@@ -435,7 +457,11 @@ public class MainActivity extends AppCompatActivity {
                                             String str_fan=editText.getText().toString();
                                             imageView_d.setImageResource(R.drawable.dian_0);
                                             AnimationDrawable animationDrawable_dian_fan=(AnimationDrawable) imageView_d.getDrawable();
-                                            SSH(User.getIp(), User.getUsername(), User.getPassword(), "./Time_fan.sh "+str_fan);
+//                                            SSH(User.getIp(), User.getUsername(), User.getPassword(), "./Time_fan.sh "+str_fan);
+                                            Thread thread2 = new Thread(()->{
+                                                Exec.ssh(User.getIp(), User.getUsername(),"/home/pi/Code/switch/MotorReverseDelay"+str_fan);
+                                            });
+                                            thread2.start();
                                             CountDownTimer timer_fan=new CountDownTimer((long) (Float.parseFloat(str_fan) *60000),1000) {
                                                 @Override
                                                 public void onTick(long millisUntilFinished) {
@@ -656,7 +682,12 @@ public class MainActivity extends AppCompatActivity {
 //                    SSH(User.getIp(), User.getUsername(), User.getPassword(), "./Wopen.sh");
 
                    // SSH(User.getIp(), User.getUsername(), User.getPassword(), "/home/pi/Code/on.sh");
-                    Exec.ssh(User.getIp(), User.getUsername(),"/home/pi/Code/on.sh");
+//                    Exec.ssh(User.getIp(), User.getUsername(),"/home/pi/Code/on.sh");
+                    Thread thread = new Thread(()->{
+                        Exec.ssh(User.getIp(), User.getUsername(),"/home/pi/Code/switch/bumpOn");
+                    });
+                    thread.start();
+
                     animationDrawable_water.start();
 
                     //Gpio状态
@@ -666,7 +697,11 @@ public class MainActivity extends AppCompatActivity {
                     Toast.makeText(MainActivity.this, "关闭水泵", Toast.LENGTH_SHORT).show();
                     //SSH(User.getIp(), User.getUsername(), User.getPassword(), "./Wstop.sh");
 //                    SSH(User.getIp(), User.getUsername(), User.getPassword(), "/home/pi/Code/off.sh");
-                    Exec.ssh(User.getIp(), User.getUsername(),"/home/pi/Code/off.sh");
+//                    Exec.ssh(User.getIp(), User.getUsername(),"/home/pi/Code/off.sh");
+                    Thread thread = new Thread(()->{
+                        Exec.ssh(User.getIp(), User.getUsername(),"/home/pi/Code/switch/bumpOff");
+                    });
+                    thread.start();
                     animationDrawable_water.stop();
 
                     //Gpio状态
@@ -998,8 +1033,11 @@ public class MainActivity extends AppCompatActivity {
         myAdapter.notifyDataSetChanged();
         plan_list.setAdapter(myAdapter);
         String  string=User.getPlan_time_year()+"-"+User.getPlan_time_moon()+"-"+User.getPlan_time_day()+"-"+User.getPlan_time_hour()+":"+User.getPlan_time_minute()+"-"+User.getPlan_time_week()+" "+User.getRadio_num()+" "+User.getPlan_repeat_num()+" "+User.getPlan_conditon_num();
-        Exec.ssh(User.getIp(),"pi","/home/pi/scrip/test2.sh "+string);
-
+//        Exec.ssh(User.getIp(),"pi","/home/pi/scrip/test2.sh "+string);
+        Thread thread = new Thread(()->{
+            Exec.ssh(User.getIp(),"pi","/home/pi/scrip/test2.sh "+string);
+        });
+        thread.start();
         // Log.e("tag","计划任务添加："+"单选编号："+User.getRadio_num()+",重复编号"+User.getPlan_repeat_num()+",状态编号"+User.getPlan_conditon_num());
         Log.e("tag",User.getPlan_time_year()+"-"+User.getPlan_time_moon()+"-"+User.getPlan_time_day()+"-"+User.getPlan_time_hour()+":"+User.getPlan_time_minute()+"-"+User.getPlan_time_week()+" "+User.getRadio_num()+" "+User.getPlan_repeat_num()+" "+User.getPlan_conditon_num());
 
@@ -1017,6 +1055,12 @@ public class MainActivity extends AppCompatActivity {
         }*/
 
 
+
+
+        /*
+        * 抛出异常：
+        *   当树莓派的计划任务为空的情况下抛出异常
+        * */
 
 
         try {
@@ -1113,6 +1157,9 @@ public class MainActivity extends AppCompatActivity {
             //需要强转为int,才会删除对应下标的数据,否则默认删除与括号中对象相同的数据
             listData.remove((int) checkedIndexList.get(i));
             Exec.ssh(User.getIp(),"pi","/home/pi/scrip/cronDel.sh "+(int) checkedIndexList.get(i));
+//            Thread thread = new Thread(()->{
+//                Exec.ssh(User.getIp(),"pi","/home/pi/scrip/cronDel.sh "+(int) checkedIndexList.get(i));
+//            });
             checkBoxList.remove(checkedIndexList.get(i));
         }
         for (int i = 0; i < checkBoxList.size(); i++) {

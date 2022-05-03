@@ -22,7 +22,7 @@ public class Exec {
   private static String str;
 
   public static void main(String[] arg){
-    //ssh("192.168.0.100","pi","ls");
+//    ssh("10.0.0.25","pi","ls");
   }
 
   public static String ssh(String Ip, String UserName, String Command){
