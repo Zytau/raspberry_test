@@ -1016,10 +1016,17 @@ public class MainActivity extends AppCompatActivity {
             listData.add(obtain_plan_list.plan_list().get(i));
         }*/
 
-        for (String st :
-                sList) {
-            listData.add(st);
-        }
+
+
+
+        try {
+            for (String st : sList) {
+                listData.add(st);
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        };
+
     }
     /**
      * 自定义listview的适配器
