@@ -1019,6 +1019,12 @@ public class MainActivity extends AppCompatActivity {
 
 
 
+        /*
+        * 抛出异常：
+        *   当树莓派的计划任务为空的情况下抛出异常
+        * */
+
+
         try {
             for (String st : sList) {
                 listData.add(st);
