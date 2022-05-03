@@ -207,7 +207,7 @@ public class MainActivity extends AppCompatActivity {
                 imageView_w.setImageResource(R.drawable.water);
                 AnimationDrawable animationDrawable_water=(AnimationDrawable) imageView_w.getDrawable();
                 String[] languages = getResources().getStringArray(R.array.water);
-                Toast.makeText(MainActivity.this, "你水泵定量选择:"+languages[pos], 100).show();
+                Toast.makeText(MainActivity.this, "你水泵定时选择:"+languages[pos], 100).show();
 
                 switch (pos){
                     case 0:break;
@@ -1016,10 +1016,17 @@ public class MainActivity extends AppCompatActivity {
             listData.add(obtain_plan_list.plan_list().get(i));
         }*/
 
-        for (String st :
-                sList) {
-            listData.add(st);
-        }
+
+
+
+        try {
+            for (String st : sList) {
+                listData.add(st);
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        };
+
     }
     /**
      * 自定义listview的适配器

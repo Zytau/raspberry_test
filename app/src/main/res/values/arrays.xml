@@ -8,9 +8,9 @@
     </string-array>
     <string-array name="water" >
         <item>*</item>
-        <item>150ml</item>
-        <item>300ml</item>
-        <item>1000ml</item>
+        <item>5s</item>
+        <item>30分钟</item>
+        <item>1小时</item>
         <item>自定义</item>
     </string-array>
     <string-array name="water_time" />
