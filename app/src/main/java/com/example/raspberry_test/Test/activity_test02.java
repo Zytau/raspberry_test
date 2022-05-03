@@ -1,4 +1,4 @@
-package com.example.raspberry_test;
+package com.example.raspberry_test.Test;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
+import com.example.raspberry_test.R;
 import com.example.raspberry_test.SSH.Exec;
 import com.example.raspberry_test.SSH.RemoteExecuteCommand;
 
@@ -23,8 +24,8 @@ public class activity_test02 extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_test02);
-      Button button=findViewById(R.id.Test_link02);
+        setContentView(R.layout.list_item);
+//      Button button=findViewById(R.id.Test_link02);
 
       //创建于主线程关联
         mainHandler=new Handler();
@@ -87,7 +88,7 @@ public class activity_test02 extends AppCompatActivity {
         * 在工作线程中，当消息循环时取出对应消息&在工作线程执行相关操作
         * */
 
-        button.setOnClickListener(new View.OnClickListener() {
+       /* button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
@@ -99,7 +100,7 @@ public class activity_test02 extends AppCompatActivity {
                 //b.通过Handler发送消息到其绑定的消息队列
                 workHandler.sendMessage(msg);
              }
-        });
+        });*/
 
 
 

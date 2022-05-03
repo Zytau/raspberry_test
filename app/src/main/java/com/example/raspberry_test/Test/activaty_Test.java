@@ -11,7 +11,6 @@ import android.widget.Spinner;
 
 import com.example.raspberry_test.R;
 import com.example.raspberry_test.SSH.RemoteExecuteCommand;
-import com.example.raspberry_test.activity_test02;
 
 public class activaty_Test extends AppCompatActivity {
     private Spinner spin_text;
@@ -20,24 +19,24 @@ public class activaty_Test extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_test);
+        setContentView(R.layout.list_item);
         //spin_text=findViewById(R.id.spin_text);
        // editText.findViewById(R.id.e);
         //button.findViewById(R.id.T);
-        Button btn1 = (Button) findViewById(R.id.T);
+//        Button btn1 = (Button) findViewById(R.id.T);
 
 
-        btn1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-               //SSH("192.168.0.100", "pi", "pi2021", "./Time_motor "+5);
-                Intent intent=new Intent(activaty_Test.this, activity_test02.class);
-                startActivity(intent);
-                //activate_login.this.setResult(RESULT_OK,intent);
-                //*结束本Activity*//*
-                //MainActivity2.this.finish();
-            }
-        });
+//        btn1.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+        SSH("192.168.0.100", "pi", "pi2021", "./Time_motor "+5);
+//                Intent intent=new Intent(activaty_Test.this, activity_test02.class);
+//                startActivity(intent);
+//                //activate_login.this.setResult(RESULT_OK,intent);
+//                //*结束本Activity*//*
+//                //MainActivity2.this.finish();
+//            }
+//        });
 
     }
     

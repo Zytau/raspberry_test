@@ -130,7 +130,7 @@ public class MainActivity extends AppCompatActivity {
         initView();
 
         //实时响应树莓派温度  5分钟刷新一次
-        //Startthread();
+      //  Startthread();
         SimpleDateFormat sdf=new SimpleDateFormat();
         //sdf.applyPattern("yyyy年MM月dd日HH时mm分ss秒");
         //2012年07月02日 16:45
@@ -967,12 +967,27 @@ public class MainActivity extends AppCompatActivity {
         Log.e("tag","计划任务"+"时间:"+User.getPlan_time()+"选择了："+User.getRadio()+"重复："+User.getplan_repeat()+"状态："+User.getplan_condition());
         String str="计划任务："+User.getPlan_time()+","+User.getRadio()+","+User.getplan_repeat()+","+User.getplan_condition();
        // adapter=new ArrayAdapter<>(this, android.R.layout.simple_spinner_item,data);
+        String s="";
+        Date date=new Date();
+        SimpleDateFormat dateFormat=new SimpleDateFormat("EEEE");
+        String currSun=dateFormat.format(date);
+
+        switch (User.getplan_repeat()){
+            case "每小时":
+                s=User.getplan_repeat()+"的"+User.getPlan_time_minute()+"分钟"+"---"+User.getRadio()+"-"+User.getplan_condition();break;
+            case "每天":
+                s=User.getplan_repeat()+"的"+User.getPlan_time_hour()+":"+User.getPlan_time_minute()+"---"+User.getRadio()+"-"+User.getplan_condition();break;
+            case "每周":
+                s=User.getplan_repeat()+"的"+currSun+" "+User.getPlan_time_hour()+":"+User.getPlan_time_minute()+"---"+User.getRadio()+","+User.getplan_condition();break;
+            case "每月":
+                s=User.getplan_repeat()+"的"+User.getPlan_time_moon()+"号"+" "+User.getPlan_time_hour()+":"+User.getPlan_time_minute()+"---"+User.getRadio()+","+User.getplan_condition();break;
+        }
 
 
         if(User.getPlan_time()!=null&&User.getRadio()!=null){
 
              // data.add(User.getRadio()+"->"+" ："+User.getplan_repeat()+" ："+User.getplan_condition()+" : "+User.getPlan_time());
-                listData.add(str);
+                listData.add(s);
 
         }else{
             Log.e("tag","添加失败");
@@ -996,9 +1011,14 @@ public class MainActivity extends AppCompatActivity {
     public void initListData() {
         //静态赋值
         listData = new ArrayList<String>();
-
-        for (int i = 0; i < obtain_plan_list.plan_list().size(); i++) {
+        ArrayList<String> sList=obtain_plan_list.plan_list();
+        /*for (int i = 0; i < sList.size(); i++) {
             listData.add(obtain_plan_list.plan_list().get(i));
+        }*/
+
+        for (String st :
+                sList) {
+            listData.add(st);
         }
     }
     /**
