@@ -313,13 +313,13 @@ public class MainActivity extends AppCompatActivity {
                     Log.e("tag","选择了"+languages[pos]);
                     break;
                     }
-                    //正转： 5s
+                    //正转： 30s
                     case 1:{ Toast.makeText(MainActivity.this, "你电机点击的是:"+languages[pos], 100).show();
                         imageButton.setVisibility(View.VISIBLE);
                         mDianSpinner.getParent();
 //                        SSH(User.getIp(), User.getUsername(), User.getPassword(), "./Time.sh "+0.5);
                         Thread thread = new Thread(()->{
-                            Exec.ssh(User.getIp(), User.getUsername(),"/home/pi/Code/switch/MotorPositiveDelay"+5);
+                            Exec.ssh(User.getIp(), User.getUsername(),"/home/pi/Code/switch/MotorPositiveDelay"+30);
                         });
                         thread.start();
                         CountDownTimer timer=new CountDownTimer(30000,1000) {
@@ -342,12 +342,12 @@ public class MainActivity extends AppCompatActivity {
                         T_Mopen.setEnabled(false);
                         F_Mopen.setEnabled(false);
 
-                    Log.e("tag","选择了5s");
+                    Log.e("tag","选择了30s");
 
                     break;
                          }
 
-                         //反转：5秒
+                         //反转：30秒
                     case 2:{ Toast.makeText(MainActivity.this, "你电机点击的是:"+languages[pos], 100).show();
                         imageButton.setVisibility(View.VISIBLE);
 
@@ -356,7 +356,7 @@ public class MainActivity extends AppCompatActivity {
                         AnimationDrawable animationDrawable_dian_fan=(AnimationDrawable) imageView_d.getDrawable();
 //                        SSH(User.getIp(), User.getUsername(), User.getPassword(), "./Time_fan.sh "+0.5);
                         Thread thread = new Thread(()->{
-                            Exec.ssh(User.getIp(), User.getUsername(),"/home/pi/Code/switch/MotorReverseDelay"+5);
+                            Exec.ssh(User.getIp(), User.getUsername(),"/home/pi/Code/switch/MotorReverseDelay"+30);
                         });
                         thread.start();
                         CountDownTimer timer=new CountDownTimer(30000,1000) {
@@ -377,7 +377,7 @@ public class MainActivity extends AppCompatActivity {
                         timer.start();
                         T_Mopen.setEnabled(false);
                         F_Mopen.setEnabled(false);
-                        Log.e("tag","选择了5s");
+                        Log.e("tag","选择了30s");
                         break;
 
 
@@ -731,6 +731,10 @@ public class MainActivity extends AppCompatActivity {
                     F_Mopen.setEnabled(false);  //单一开启控制
                     Toast.makeText(MainActivity.this, "电机正转开始", Toast.LENGTH_SHORT).show();
                    // SSH(User.getIp(), User.getUsername(), User.getPassword(), "./T_Mopen.sh");
+                    Thread thread = new Thread(()->{
+                        Exec.ssh(User.getIp(), User.getUsername(),"/home/pi/Code/switch/MotorPositive");
+                    });
+                    thread.start();
                     animationDrawable_dian.start();
 
                     //Gpio状态
@@ -738,6 +742,10 @@ public class MainActivity extends AppCompatActivity {
                 }else{
                     Toast.makeText(MainActivity.this, "电机正转结束", Toast.LENGTH_SHORT).show();
                    // SSH(User.getIp(), User.getUsername(), User.getPassword(), "./T_Mstop.sh");
+                    Thread thread = new Thread(()->{
+                        Exec.ssh(User.getIp(), User.getUsername(),"/home/pi/Code/switch/MotorOff");
+                    });
+                    thread.start();
                     animationDrawable_dian.stop();
                     F_Mopen.setEnabled(true);
 
@@ -758,6 +766,10 @@ public class MainActivity extends AppCompatActivity {
                     T_Mopen.setEnabled(false);
                     Toast.makeText(MainActivity.this, "电机反转开始", Toast.LENGTH_SHORT).show();
                    // SSH(User.getIp(), User.getUsername(), User.getPassword(), "./F_Mopen.sh");
+                    Thread thread = new Thread(()->{
+                        Exec.ssh(User.getIp(), User.getUsername(),"/home/pi/Code/switch/MotorReverse");
+                    });
+                    thread.start();
                     animationDrawable_dian.start();
 
                     //Gpio状态
@@ -766,6 +778,10 @@ public class MainActivity extends AppCompatActivity {
                     T_Mopen.setEnabled(true);
                     Toast.makeText(MainActivity.this, "电机反转结束", Toast.LENGTH_SHORT).show();
                    // SSH(User.getIp(), User.getUsername(), User.getPassword(), "./F_Mstop.sh");
+                    Thread thread = new Thread(()->{
+                        Exec.ssh(User.getIp(), User.getUsername(),"/home/pi/Code/switch/MotorOff");
+                    });
+                    thread.start();
                     animationDrawable_dian.stop();
 
                     //Gpio状态
