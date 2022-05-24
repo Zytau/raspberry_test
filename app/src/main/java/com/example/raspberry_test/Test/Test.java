@@ -37,8 +37,8 @@ public class Test {
         //rec.executeSuccess(s);  //返回执行指令的成效   但还会在执行一次命令
 
     }*/
-
-        String s = Exec.ssh("10.0.0.25", "pi", " crontab -l");
+       // Exec.ssh(User.getIp(),User.getUsername(),"/home/pi/Code/switch/getMontorPin").toString();
+        String s = Exec.ssh("10.0.0.25", "pi", "/home/pi/Code/switch/getMontorPin");
         System.out.println(s);
     }
 }

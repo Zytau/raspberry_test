@@ -85,13 +85,6 @@
             android:text="0天0时0分0秒"
             />
 
-        <TextView
-
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="检测水位"
-            android:background="@color/black" />
-
     </GridLayout>
 
     <View
@@ -149,10 +142,6 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             >
-
-
-
-
         </LinearLayout>
 
         <GridLayout
@@ -326,9 +315,7 @@
             android:layout_marginLeft="10dp"
             android:thumb="@drawable/switch_custom_thumb_selector"
             android:track="@drawable/switch_custom_track_selector"
-
             />
-
         <Switch
             android:id="@+id/dian_00"
             android:layout_width="wrap_content"
@@ -342,7 +329,6 @@
             android:layout_marginLeft="10dp"
             android:thumb="@drawable/switch_custom_thumb_selector"
             android:track="@drawable/switch_custom_track_selector" />
-
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
@@ -380,7 +366,7 @@
         android:layout_column="5"
         ></TextView>
 
-    <ImageButton
+  <!--  <ImageButton
         android:id="@+id/dian_cancel"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
@@ -393,7 +379,7 @@
         android:visibility="gone"
         android:onClick="dian_cancel_off"
         ></ImageButton>
-
+-->
 
    <!-- <Button
         android:id="@+id/plan_button_dian"
@@ -560,7 +546,8 @@
         <ListView
             android:id="@+id/plan_list"
             android:layout_width="fill_parent"
-            android:layout_height="150dp"></ListView>
+            android:layout_height="150dp"
+            ></ListView>
 
         <LinearLayout
             android:layout_width="fill_parent"

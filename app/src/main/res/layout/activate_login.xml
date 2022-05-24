@@ -53,7 +53,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textColor="@color/edit"
-
+        android:inputType="textPassword"
         android:hint=""></EditText>
 
     <LinearLayout
@@ -63,7 +63,7 @@
         android:id="@+id/loge"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="登录"
+        android:text="连接"
         android:background="@color/size"
         android:onClick="Loge"
         android:layout_marginLeft="5pt"

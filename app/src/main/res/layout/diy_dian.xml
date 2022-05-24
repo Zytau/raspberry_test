@@ -48,7 +48,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="单位：分钟"
+            android:text="单位：秒"
             android:gravity="center"
             android:textSize="10dp"
             android:textColor="@color/black"

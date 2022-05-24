@@ -23,6 +23,7 @@ public class Exec {
 
   public static void main(String[] arg){
     //ssh("192.168.0.100","pi","ls");
+    ssh("10.0.0.25", "pi", " crontab -l");
   }
 
   public static String ssh(String Ip, String UserName, String Command){

@@ -16,6 +16,7 @@ import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.Message;
 import android.os.StrictMode;
+import android.os.Trace;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -128,9 +129,19 @@ public class MainActivity extends AppCompatActivity {
         }
         initListData();
         initView();
+        //启动时首先检测GPIO口状态
+        Detection_GPIO();
+        Detection_Time();
 
         //实时响应树莓派温度  5分钟刷新一次
-      //  Startthread();
+       Startthread();
+
+       //1分钟检测Gpio口的状态
+        Startthread_gpio();
+
+
+
+      //  handler.postDelayed(task, 1000);
         SimpleDateFormat sdf=new SimpleDateFormat();
         //sdf.applyPattern("yyyy年MM月dd日HH时mm分ss秒");
         //2012年07月02日 16:45
@@ -203,21 +214,20 @@ public class MainActivity extends AppCompatActivity {
             @SuppressLint("WrongConstant")
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
-
                 imageView_w.setImageResource(R.drawable.water);
                 AnimationDrawable animationDrawable_water=(AnimationDrawable) imageView_w.getDrawable();
                 String[] languages = getResources().getStringArray(R.array.water);
                 Toast.makeText(MainActivity.this, "你水泵定时选择:"+languages[pos], 100).show();
 
                 switch (pos){
-                    case 0:break;
-                    
+                    case 0:
+                      /*  mDianSpinner.getParent();
 
-                    //150ml
-                    case 1:
-                        mDianSpinner.getParent();
-                        SSH(User.getIp(), User.getUsername(), User.getPassword(), "./Time_water.sh "+1);
-                        CountDownTimer timer=new CountDownTimer(1500,100) {
+                        Thread thread_la_water00 = new Thread(()->{
+                            Exec.ssh(User.getIp(), User.getUsername(),"/home/pi/Code/switch/bumpDelay "+5000);
+                        });
+                        thread_la_water00.start();
+                        CountDownTimer timer00=new CountDownTimer(5000,100) {
                             @Override
                             public void onTick(long millisUntilFinished) {
                                 animationDrawable_water.start();
@@ -230,13 +240,89 @@ public class MainActivity extends AppCompatActivity {
                                 animationDrawable_water.stop();
                             }
                         };
-                        timer.start();
+                        timer00.start();*/
+                        break;
+                    //5秒
+                    case 1:
+                        mDianSpinner.getParent();
+                        Thread thread_la_water01 = new Thread(()->{
+                            Exec.ssh(User.getIp(), User.getUsername(),"/home/pi/Code/switch/bumpDelay "+5000);
+                        });
+                        thread_la_water01.start();
+                        CountDownTimer timer01=new CountDownTimer(5000,1000) {
+                            @Override
+                            public void onTick(long millisUntilFinished) {
+                                mWaterSpinner.setEnabled(false);
+                                animationDrawable_water.start();
+                                ding_water_time.setText(millisUntilFinished/1000+"s");
+                                water_Gpio.setText("0");
+                            }
 
+                            @Override
+                            public void onFinish() {
+                                ding_water_time.setText("无");
+                                animationDrawable_water.stop();
+                                mWaterSpinner.setEnabled(true);
+                                water_Gpio.setText("1");
+                            }
+                        };
+                        timer01.start();
+                        break;
+                        //30分钟
+                    case 2:
+                        mDianSpinner.getParent();
 
-                        //300ml
-                    case 2:break;
-                    //1000ml
-                    case 3:break;
+                        Thread thread_la_water02 = new Thread(()->{
+                            Exec.ssh(User.getIp(), User.getUsername(),"/home/pi/Code/switch/bumpDelay "+1800000);
+                        });
+                        thread_la_water02.start();
+                        CountDownTimer timer02=new CountDownTimer(1800000,1000) {
+                            @Override
+                            public void onTick(long millisUntilFinished) {
+                                animationDrawable_water.start();
+                                mWaterSpinner.setEnabled(false);
+                                ding_water_time.setText(millisUntilFinished/1000+"s");
+                                water_Gpio.setText("0");
+                            }
+
+                            @Override
+                            public void onFinish() {
+                                ding_water_time.setText("无");
+                                animationDrawable_water.stop();
+                                mWaterSpinner.setEnabled(true);
+                                water_Gpio.setText("1");
+                            }
+                        };
+                        timer02.start();
+                        break;
+                    //1小时
+                    case 3:
+                        mDianSpinner.getParent();
+
+                        Thread thread_la_water03 = new Thread(()->{
+                            Exec.ssh(User.getIp(), User.getUsername(),"/home/pi/Code/switch/bumpDelay "+3600000);
+                        });
+                        thread_la_water03.start();
+                        CountDownTimer timer03=new CountDownTimer(3600000 ,100) {
+                            @Override
+                            public void onTick(long millisUntilFinished) {
+                                animationDrawable_water.start();
+                                mWaterSpinner.setEnabled(false);
+                                ding_water_time.setText(millisUntilFinished/1000+"s");
+                                water_Gpio.setText("0");
+                            }
+
+                            @Override
+                            public void onFinish() {
+                                ding_water_time.setText("无");
+                                animationDrawable_water.stop();
+                                mWaterSpinner.setEnabled(true);
+                                water_Gpio.setText("1");
+                            }
+                        };
+                        timer03.start();
+                        break;
+
                     //水泵自定义
                     case 4:
                         AlertDialog.Builder customizeDialog_water=new AlertDialog.Builder(MainActivity.this);
@@ -244,26 +330,33 @@ public class MainActivity extends AppCompatActivity {
                         customizeDialog_water.setTitle("水泵自定义");
                         customizeDialog_water.setView(dialogView);
                         EditText editText_water=dialogView.findViewById(R.id.diy_edit_water);
-
                         imageView_w.setImageResource(R.drawable.water);
                         AnimationDrawable animationDrawable_diy_water=(AnimationDrawable) imageView_w.getDrawable();
-
                         customizeDialog_water.setPositiveButton("确定", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 String str_water=editText_water.getText().toString();
-                                SSH(User.getIp(), User.getUsername(), User.getPassword(), "./Time_water.sh "+str_water);
+
+
+                                Thread thread_la_water04 = new Thread(()->{
+                                    SSH(User.getIp(), User.getUsername(), User.getPassword(), "./Time_water.sh "+str_water);
+                                });
+                                thread_la_water04.start();
                                 CountDownTimer timer_zheng=new CountDownTimer((long) (Float.parseFloat(str_water)*1000),1000) {
                                     @Override
                                     public void onTick(long millisUntilFinished) {
                                         animationDrawable_diy_water.start();
-                                        ding_water_time.setText(millisUntilFinished/1000+"ml");
+                                        ding_water_time.setText(millisUntilFinished/1000+"s");
+                                        mWaterSpinner.setEnabled(false);
+                                        water_Gpio.setText("0");
                                     }
 
                                     @Override
                                     public void onFinish() {
                                         ding_water_time.setText("无");
+                                        water_Gpio.setText("1");
                                         animationDrawable_diy_water.stop();
+                                        mWaterSpinner.setEnabled(true);
                                         Water.setEnabled(true);
                                     }
                                 };
@@ -273,10 +366,7 @@ public class MainActivity extends AppCompatActivity {
                         });
                         customizeDialog_water.show();
                         break;
-
-
                 }
-
             }
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
@@ -285,7 +375,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         /**
-         * 电机定量下拉框
+         * 电机定时下拉框
          * */
         mDianSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @SuppressLint("WrongConstant")
@@ -295,62 +385,71 @@ public class MainActivity extends AppCompatActivity {
                 AnimationDrawable animationDrawable_dian=(AnimationDrawable) imageView_d.getDrawable();
                 String[] languages = getResources().getStringArray(R.array.dian);
                 Toast.makeText(MainActivity.this, "你电机点击的是:"+languages[pos], 100).show();
-
                 switch(pos){
-
                     //初始  无
                     case 0:{ //Toast.makeText(MainActivity.this, "你电机点击的是:"+languages[pos], 100).show();
                     Log.e("tag","选择了"+languages[pos]);
                     break;
                     }
-                    //正转： 5s
+                    //正转： 30s
                     case 1:{ Toast.makeText(MainActivity.this, "你电机点击的是:"+languages[pos], 100).show();
-                        imageButton.setVisibility(View.VISIBLE);
+                       // imageButton.setVisibility(View.VISIBLE);
                         mDianSpinner.getParent();
-                        SSH(User.getIp(), User.getUsername(), User.getPassword(), "./Time.sh "+0.5);
+                        Thread thread_la_zheng02 = new Thread(()->{
+                            Exec.ssh(User.getIp(), User.getUsername(),"/home/pi/Code/switch/MotorPositiveDelay "+30);
+                        });
+                        thread_la_zheng02.start();
+
                         CountDownTimer timer=new CountDownTimer(30000,1000) {
                             @Override
                             public void onTick(long millisUntilFinished) {
                                 animationDrawable_dian.start();
+                                mDianSpinner.setEnabled(false);
                                 ding_dian_time.setText(millisUntilFinished/1000+"s");
+                                dian_Gpio.setText("0");
                             }
 
                             @Override
                             public void onFinish() {
                                 ding_dian_time.setText("无");
+                                mDianSpinner.setEnabled(true);
+                                dian_Gpio.setText("1");
                                 animationDrawable_dian.stop();
                                 T_Mopen.setEnabled(true);
                                 F_Mopen.setEnabled(true);
                             }
                         };
                         timer.start();
-
                         T_Mopen.setEnabled(false);
                         F_Mopen.setEnabled(false);
-
-                    Log.e("tag","选择了5s");
-
+                    Log.e("tag","选择了30s");
                     break;
                          }
-
-                         //反转：5秒
+                         //反转：30秒
                     case 2:{ Toast.makeText(MainActivity.this, "你电机点击的是:"+languages[pos], 100).show();
-                        imageButton.setVisibility(View.VISIBLE);
+//                        imageButton.setVisibility(View.VISIBLE);
 
                         mDianSpinner.getParent();
                         imageView_d.setImageResource(R.drawable.dian_0);
                         AnimationDrawable animationDrawable_dian_fan=(AnimationDrawable) imageView_d.getDrawable();
-                        SSH(User.getIp(), User.getUsername(), User.getPassword(), "./Time_fan.sh "+0.5);
+                        Thread thread_la_zheng03 = new Thread(()->{
+                            Exec.ssh(User.getIp(), User.getUsername(),"/home/pi/Code/switch/MotorReverseDelay "+30);
+                        });
+                        thread_la_zheng03.start();
                         CountDownTimer timer=new CountDownTimer(30000,1000) {
                             @Override
                             public void onTick(long millisUntilFinished) {
                                 animationDrawable_dian_fan.start();
+                                mDianSpinner.setEnabled(false);
                                 ding_dian_time.setText(millisUntilFinished/1000+"s");
+                                dian_Gpio.setText("0");
                             }
 
                             @Override
                             public void onFinish() {
                                 ding_dian_time.setText("无");
+                                mDianSpinner.setEnabled(true);
+                                dian_Gpio.setText("1");
                                 animationDrawable_dian_fan.stop();
                                 T_Mopen.setEnabled(true);
                                 F_Mopen.setEnabled(true);
@@ -359,21 +458,17 @@ public class MainActivity extends AppCompatActivity {
                         timer.start();
                         T_Mopen.setEnabled(false);
                         F_Mopen.setEnabled(false);
-                        Log.e("tag","选择了5s");
+//                        Log.e("tag","选择了5s");
                         break;
-
-
                     }
                     //自定义
                     case 3:{
                         imageView_d.setImageResource(R.drawable.dian_1);
                         AnimationDrawable animationDrawable_dian_diy_zheng=(AnimationDrawable) imageView_d.getDrawable();
-
                         AlertDialog.Builder customizeDialog=new AlertDialog.Builder(MainActivity.this);
                         final View dialogView = LayoutInflater.from(MainActivity.this).inflate(R.layout.diy_dian,null);
                             customizeDialog.setTitle("自定义");
                             customizeDialog.setView(dialogView);
-
                         RadioGroup radioGroup=(RadioGroup) dialogView.findViewById(R.id.radioGroup);
                         EditText editText=(EditText)dialogView.findViewById(R.id.diy_edit_dian);
                         radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
@@ -392,27 +487,33 @@ public class MainActivity extends AppCompatActivity {
                                 }
                             }
                         });
-
-
                         customizeDialog.setPositiveButton("确定", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
                                     Log.e("tag","输入框内容"+editText.getText());
-                                    imageButton.setVisibility(View.VISIBLE);
+//                                    imageButton.setVisibility(View.VISIBLE);
                                     switch (state){
                                         case 0:
                                             String str_zheng=editText.getText().toString();
-                                            SSH(User.getIp(), User.getUsername(), User.getPassword(), "./Time.sh "+str_zheng);
-                                            CountDownTimer timer_zheng=new CountDownTimer((long) (Float.parseFloat(str_zheng)*60000),1000) {
+                                            Thread thread_la_diy_zheng = new Thread(()->{
+//                                                SSH(User.getIp(), User.getUsername(), User.getPassword(), "/home/pi/Code/switch/MotorPositiveDelay "+str_zheng);
+                                                Exec.ssh(User.getIp(), User.getUsername(),"/home/pi/Code/switch/MotorPositiveDelay "+str_zheng);
+                                            });
+                                            thread_la_diy_zheng.start();
+//                                            CountDownTimer timer_zheng=new CountDownTimer((long) (Float.parseFloat(str_zheng)*60000),1000) {
+                                            CountDownTimer timer_zheng=new CountDownTimer((long) (Float.parseFloat(str_zheng)*1000),1000) {
                                                 @Override
                                                 public void onTick(long millisUntilFinished) {
                                                     animationDrawable_dian_diy_zheng.start();
+                                                    mDianSpinner.setEnabled(false);
                                                     ding_dian_time.setText(millisUntilFinished/1000+"s");
+                                                    dian_Gpio.setText("0");
                                                 }
-
                                                 @Override
                                                 public void onFinish() {
                                                     ding_dian_time.setText("无");
+                                                    dian_Gpio.setText("1");
+                                                    mDianSpinner.setEnabled(true);
                                                     animationDrawable_dian_diy_zheng.stop();
                                                     T_Mopen.setEnabled(true);
                                                     F_Mopen.setEnabled(true);
@@ -424,28 +525,32 @@ public class MainActivity extends AppCompatActivity {
                                             if(timer_zheng!=null)
                                             if(stop_time==1){
                                                 timer_zheng.cancel();
-
                                                 ding_dian_time.setText("无");
                                                 stop_time=0;
-
                                             }
                                             break;
-
                                         case 1:
                                             String str_fan=editText.getText().toString();
                                             imageView_d.setImageResource(R.drawable.dian_0);
                                             AnimationDrawable animationDrawable_dian_fan=(AnimationDrawable) imageView_d.getDrawable();
-                                            SSH(User.getIp(), User.getUsername(), User.getPassword(), "./Time_fan.sh "+str_fan);
-                                            CountDownTimer timer_fan=new CountDownTimer((long) (Float.parseFloat(str_fan) *60000),1000) {
+                                            Thread thread_la_diy_fan = new Thread(()->{
+//                                                SSH(User.getIp(), User.getUsername(), User.getPassword(), "/home/pi/Code/switch/MotorReverseDelay "+str_fan);
+                                                Exec.ssh(User.getIp(), User.getUsername(),"/home/pi/Code/switch/MotorReverseDelay "+str_fan);
+                                            });
+                                            thread_la_diy_fan.start();
+//                                            CountDownTimer timer_fan=new CountDownTimer((long) (Float.parseFloat(str_fan) *60000),1000) {
+                                            CountDownTimer timer_fan=new CountDownTimer((long) (Float.parseFloat(str_fan)*1000 ),1000) {
                                                 @Override
                                                 public void onTick(long millisUntilFinished) {
                                                     animationDrawable_dian_fan.start();
+                                                    mDianSpinner.setEnabled(false);
                                                     ding_dian_time.setText(millisUntilFinished/1000+"s");
                                                 }
                                                 @Override
                                                 public void onFinish() {
                                                     ding_dian_time.setText("无");
                                                     animationDrawable_dian_fan.stop();
+                                                    mDianSpinner.setEnabled(true);
                                                     T_Mopen.setEnabled(true);
                                                     F_Mopen.setEnabled(true);
                                                 }
@@ -453,30 +558,13 @@ public class MainActivity extends AppCompatActivity {
                                             timer_fan.start();
                                             T_Mopen.setEnabled(false);
                                             F_Mopen.setEnabled(false);
-/*
-                                            if(timer_fan!=null)
-                                                if(stop_time==1){
-                                                    timer_fan.cancel();
-
-                                                    ding_dian_time.setText("无");
-                                                    stop_time=0;
-
-                                                }*/
-
                                             break;
-
                                     }
-
-
-
                                 }
                             });
                         customizeDialog.show();
                         break;
                     }
-
-
-
                 }
             }
             @Override
@@ -507,15 +595,12 @@ public class MainActivity extends AppCompatActivity {
                 String M=time.substring(15,17);     //分钟
                 String Moon=time.substring(5,7);     //月份
                 String Day=time.substring(8,10);     //日
-
                 User.setPlan_time_year(Year);
                 User.setPlan_time_moon(Moon);       //传值：月份
                 User.setPlan_time_day(Day);         //传值：日
                 User.setPlan_time_hour(H);          //传值：小时
                 User.setPlan_time_minute(M);        //传值：分钟
                 //User.setPlan_time_week();    //传值：周几
-
-
 
 
                 switch (position){
@@ -530,8 +615,6 @@ public class MainActivity extends AppCompatActivity {
                             User.setPlan_time_hour(H);          //传值：小时
                             User.setPlan_time_minute(M);        //传值：分钟
                             User.setPlan_repeat_num(position);
-
-
 
                             /**
                              * 每天 ---  小时-分钟-（开关）
@@ -656,21 +739,29 @@ public class MainActivity extends AppCompatActivity {
 //                    SSH(User.getIp(), User.getUsername(), User.getPassword(), "./Wopen.sh");
 
                    // SSH(User.getIp(), User.getUsername(), User.getPassword(), "/home/pi/Code/on.sh");
-                    Exec.ssh(User.getIp(), User.getUsername(),"/home/pi/Code/on.sh");
+                    Thread thread_watert_on=new Thread(()->{
+                        Exec.ssh(User.getIp(), User.getUsername(),"/home/pi/Code/switch/bumpOn");
+                    });
+                    thread_watert_on.start();
                     animationDrawable_water.start();
 
                     //Gpio状态
-                    water_Gpio.setText("1");
+                    water_Gpio.setText("0");
 
                 }else{
                     Toast.makeText(MainActivity.this, "关闭水泵", Toast.LENGTH_SHORT).show();
                     //SSH(User.getIp(), User.getUsername(), User.getPassword(), "./Wstop.sh");
 //                    SSH(User.getIp(), User.getUsername(), User.getPassword(), "/home/pi/Code/off.sh");
-                    Exec.ssh(User.getIp(), User.getUsername(),"/home/pi/Code/off.sh");
+
+                    Thread thread_water_off=new Thread(()->{
+                        Exec.ssh(User.getIp(), User.getUsername(),"/home/pi/Code/switch/bumpOff");
+                    });
+                    thread_water_off.start();
+
                     animationDrawable_water.stop();
 
                     //Gpio状态
-                    water_Gpio.setText("0");
+                    water_Gpio.setText("1");
                 }
             }
         });
@@ -695,19 +786,28 @@ public class MainActivity extends AppCompatActivity {
                 if(T_Mopen.isChecked()&&!F_Mopen.isChecked()){
                     F_Mopen.setEnabled(false);  //单一开启控制
                     Toast.makeText(MainActivity.this, "电机正转开始", Toast.LENGTH_SHORT).show();
-                   // SSH(User.getIp(), User.getUsername(), User.getPassword(), "./T_Mopen.sh");
+//                    SSH(User.getIp(), User.getUsername(), User.getPassword(), "./T_Mopen.sh");
+                    Thread thread_zheng_on = new Thread(()->{
+                        Exec.ssh(User.getIp(), User.getUsername(),"/home/pi/Code/switch/MotorPositive");
+                    });
+                    thread_zheng_on.start();
                     animationDrawable_dian.start();
 
                     //Gpio状态
-                    dian_Gpio.setText("1");
+                    dian_Gpio.setText("0");
                 }else{
                     Toast.makeText(MainActivity.this, "电机正转结束", Toast.LENGTH_SHORT).show();
-                   // SSH(User.getIp(), User.getUsername(), User.getPassword(), "./T_Mstop.sh");
+//                    SSH(User.getIp(), User.getUsername(), User.getPassword(), "./T_Mstop.sh");
+                    Thread thread_off01 = new Thread(()->{
+                        Exec.ssh(User.getIp(), User.getUsername(),"/home/pi/Code/switch/MotorOff");
+                    });
+                    thread_off01.start();
+
                     animationDrawable_dian.stop();
                     F_Mopen.setEnabled(true);
 
                     //Gpio状态
-                    dian_Gpio.setText("0");
+                    dian_Gpio.setText("1");
 
                 }
             }
@@ -722,27 +822,30 @@ public class MainActivity extends AppCompatActivity {
                 if(!T_Mopen.isChecked()&&F_Mopen.isChecked()){
                     T_Mopen.setEnabled(false);
                     Toast.makeText(MainActivity.this, "电机反转开始", Toast.LENGTH_SHORT).show();
-                   // SSH(User.getIp(), User.getUsername(), User.getPassword(), "./F_Mopen.sh");
+//                    SSH(User.getIp(), User.getUsername(), User.getPassword(), "./F_Mopen.sh");
+                    Thread thread_fan_on = new Thread(()->{
+                        Exec.ssh(User.getIp(), User.getUsername(),"/home/pi/Code/switch/MotorReverse");
+                    });
+                    thread_fan_on.start();
                     animationDrawable_dian.start();
 
                     //Gpio状态
-                    dian_Gpio.setText("1");
+                    dian_Gpio.setText("0");
                 }else{
                     T_Mopen.setEnabled(true);
                     Toast.makeText(MainActivity.this, "电机反转结束", Toast.LENGTH_SHORT).show();
-                   // SSH(User.getIp(), User.getUsername(), User.getPassword(), "./F_Mstop.sh");
+//                    SSH(User.getIp(), User.getUsername(), User.getPassword(), "./F_Mstop.sh");
+                    Thread thread_off02 = new Thread(()->{
+                        Exec.ssh(User.getIp(), User.getUsername(),"/home/pi/Code/switch/MotorOff");
+                    });
+                    thread_off02.start();
                     animationDrawable_dian.stop();
 
                     //Gpio状态
-                    dian_Gpio.setText("0");
+                    dian_Gpio.setText("1");
                 }
             }
         });
-
-
-
-
-
 
         /**
          * @描述：计划任务-获取选择时间
@@ -815,7 +918,7 @@ public class MainActivity extends AppCompatActivity {
        // t=findViewById(R.id.but);
         ding_water_time=findViewById(R.id.ding_water_time);
         ding_dian_time=findViewById(R.id.ding_dian_time);
-        imageButton=findViewById(R.id.dian_cancel);
+
         delet_button=findViewById(R.id.delet_Button);
         cancel_button = findViewById(R.id.cancel_Button);
 
@@ -867,11 +970,11 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-/*    //跳转到登录界面
+    //跳转到登录界面
     public void insert(View v) {
                 Intent intent = new Intent(this,activate_login.class);
                 startActivity(intent);
-    }*/
+    }
 
 
 
@@ -879,16 +982,7 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-    Runnable runnable=new Runnable() {
-        @Override
-        public void run() {
-            Handler mHandler = new Handler();
-            mHandler.postDelayed(runnable, 10000);
-            Message message = new Message( );
-            message.what = 1;
-            mHandler.sendMessage(message);
-        }
-    };
+
 
 
     private void Startthread(){
@@ -897,10 +991,10 @@ public class MainActivity extends AppCompatActivity {
             public void run() {
                 do {
                     try {
-                        Thread.sleep(1000);
+                        Thread.sleep(60000*5);
                         Message message=new Message();
                         message.what=1;
-                        handler.sendMessage(message);
+                        handler01.sendMessage(message);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
@@ -909,31 +1003,44 @@ public class MainActivity extends AppCompatActivity {
         }.start();
     }
 
+    private void Startthread_gpio() {
+        new Thread() {
+            @Override
+            public void run() {
+                do {
+                    try {
+                        Thread.sleep(60000*1);
+                        Message message = new Message();
+                        message.what =2;
+                        handler01.sendMessage(message);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                } while (true);
+            }
+        }.start();
+    }
     //在主线程中进行数据处理
-    private Handler handler=new Handler(){
+    private Handler handler01=new Handler(){
         @Override
         public void handleMessage(@NonNull Message msg) {
             switch (msg.what){
                 case 1:
-                   String Tem=Temperature.tem();
-                   Log.e("tag",Tem);
-                 //  String Hard= HardDrive.hard();
-                   String Ost= Time.time();
 
-                    wendu.setText(Tem.toString());
-//                    harddrive.setText(Hard);
-                    OStime.setText(Ost.toString());
-                   // SSH(User.getIp(), User.getUsername(), User.getPassword(), "./Time.sh");
                     break;
                 case 2:
-//                    SSH(User.getIp(), User.getUsername(), User.getPassword(), "./Time.sh");
+                    Detection_GPIO();
                     break;
-
-
-
             }
         }
     };
+
+
+
+
+
+
+
 
 
 
@@ -947,7 +1054,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    public void dian_cancel_off(View view){
+ /*   public void dian_cancel_off(View view){
         imageView_d.setImageResource(R.drawable.dian_1);
         AnimationDrawable animationDrawable_dian=(AnimationDrawable) imageView_d.getDrawable();
         animationDrawable_dian.stop();
@@ -957,13 +1064,12 @@ public class MainActivity extends AppCompatActivity {
         stop_time=1;
         SSH(User.getIp(), User.getUsername(), User.getPassword(), "./T_Mstop.sh");
         SSH(User.getIp(), User.getUsername(), User.getPassword(), "./F_Mstop.sh");
-    }
+    }*/
 
     /**
      * 计划任务
      * */
     public void plan(View view) {
-
         Log.e("tag","计划任务"+"时间:"+User.getPlan_time()+"选择了："+User.getRadio()+"重复："+User.getplan_repeat()+"状态："+User.getplan_condition());
         String str="计划任务："+User.getPlan_time()+","+User.getRadio()+","+User.getplan_repeat()+","+User.getplan_condition();
        // adapter=new ArrayAdapter<>(this, android.R.layout.simple_spinner_item,data);
@@ -997,7 +1103,15 @@ public class MainActivity extends AppCompatActivity {
       //  adapter.notifyDataSetChanged();
         myAdapter.notifyDataSetChanged();
         plan_list.setAdapter(myAdapter);
-        String  string=User.getPlan_time_year()+"-"+User.getPlan_time_moon()+"-"+User.getPlan_time_day()+"-"+User.getPlan_time_hour()+":"+User.getPlan_time_minute()+"-"+User.getPlan_time_week()+" "+User.getRadio_num()+" "+User.getPlan_repeat_num()+" "+User.getPlan_conditon_num();
+        String  string=User.getPlan_time_year()+"-"+
+                User.getPlan_time_moon()+"-"+
+                User.getPlan_time_day()+"-"+
+                User.getPlan_time_hour()+":"+
+                User.getPlan_time_minute()+"-"+
+                User.getPlan_time_week()+" "+
+                User.getRadio_num()+" "+
+                User.getPlan_repeat_num()+" "+
+                User.getPlan_conditon_num();
         Exec.ssh(User.getIp(),"pi","/home/pi/scrip/test2.sh "+string);
 
         // Log.e("tag","计划任务添加："+"单选编号："+User.getRadio_num()+",重复编号"+User.getPlan_repeat_num()+",状态编号"+User.getPlan_conditon_num());
@@ -1012,19 +1126,10 @@ public class MainActivity extends AppCompatActivity {
         //静态赋值
         listData = new ArrayList<String>();
         ArrayList<String> sList=obtain_plan_list.plan_list();
-        /*for (int i = 0; i < sList.size(); i++) {
-            listData.add(obtain_plan_list.plan_list().get(i));
-        }*/
-
-
-
-
         /*
         * 抛出异常：
         *   当树莓派的计划任务为空的情况下抛出异常
         * */
-
-
         try {
             for (String st : sList) {
                 listData.add(st);
@@ -1032,7 +1137,6 @@ public class MainActivity extends AppCompatActivity {
         }catch (Exception e){
             e.printStackTrace();
         };
-
     }
     /**
      * 自定义listview的适配器
@@ -1093,11 +1197,9 @@ public class MainActivity extends AppCompatActivity {
          * 列表item的下标位置
          */
         int position;
-
         public CheckBoxListener(int position) {
             this.position = position;
         }
-
         @Override
         public void onCheckedChanged(CompoundButton arg0, boolean isChecked) {
             if (isChecked) {
@@ -1107,8 +1209,6 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
-
-
     /**
      * 删除按钮的点击事件
      */
@@ -1131,7 +1231,6 @@ public class MainActivity extends AppCompatActivity {
         myAdapter.notifyDataSetChanged();
         //清空checkedIndexList,避免影响下一次删除
         checkedIndexList.clear();
-
         delet_button.setVisibility(View.GONE);
         cancel_button.setVisibility(View.GONE);
     }
@@ -1180,11 +1279,43 @@ public class MainActivity extends AppCompatActivity {
         }
 
     }
-
-    public String runtime(){
-        String s="";
-        Exec.ssh("10.0.0.25","pi","cat /proc/uptime| awk -F. '{run_days=$1 / 86400;run_hour=($1 % 86400)/3600;run_minute=($1 % 3600)/60;run_second=$1 % 60;printf(\"%d天%d时%d分%d秒\",run_days,run_hour,run_minute,run_second)}'");
-        return s;
+    public void Detection_Time(){
+        String Tem=Temperature.tem();
+        String Ost= Time.time();
+        wendu.setText(Tem.toString());
+        OStime.setText(Ost.toString());
+        Log.e("消息","刷新温度和时间！！");
     }
+
+    public void Detection_GPIO(){
+        String water="";
+        String dian="";
+        String D[]=Exec.ssh(User.getIp(),User.getUsername(),"/home/pi/Code/switch/getMontorPin").split("\\r?\\n");
+        String W[]=Exec.ssh(User.getIp(),User.getUsername(),"/home/pi/Code/switch/getBumpPin").split("\\r?\\n");
+        for (String i :
+                D) {
+            dian+=i;
+        }
+        for (String o :
+                W) {
+            water+=o;
+        }
+        Log.e("消息","刷新GPIO状态---"+"水泵："+water+"电机："+dian);
+
+        if(water.equals("1")){
+            water_Gpio.setText("1");
+        }else if(water.equals("0")) {
+            water_Gpio.setText("0");
+        }
+        if(dian.equals("1")){
+            dian_Gpio.setText("1");
+        }else if(dian.equals("0")){
+            dian_Gpio.setText("0");
+        }
+
+    }
+
+
+
 
 }
